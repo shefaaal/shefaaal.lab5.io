@@ -1,11 +1,10 @@
 import os
 import flask
-from flask import Flask, session , redirect ,Request ,flash
+from flask import Flask, session, redirect, request, flash, render_template
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from werkzeug.security import generate_password_hash , check_password_hash
-import query 
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -22,49 +21,38 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-
 @app.route("/")
 def index():
-    return "Project 1: TODO , this is my books datat base"
+    return "Shafa Books Database"
 
-
-@app.route("/Register" , methods = ["GET","POST"])
-def regiestraion():
-    if Request.access_control_request_method == 'POST':
-        username = Request.form['username']
-        password = Request.form['password']
+@app.route("/Register", methods=["GET", "POST"])
+def registration():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
         hash_pass = generate_password_hash(password)
+        
+        # Check if the user already exists
+        existing_user = db.execute("SELECT * FROM users WHERE username = :username", {"username": username}).fetchone()
+        if existing_user:
+            flash("Username already exists. Please choose another one.")
+            return redirect("/Register")
+        
+        # Insert new user into the database
+        db.execute("INSERT INTO users (username, password) VALUES (:username, :password)", 
+                   {"username": username, "password": hash_pass})
+        db.commit()
 
-    return("register.html")
+        flash("Registration successful! Please log in.")
+        return redirect("/Login")
 
+    # Render the registration page if GET request
+    return render_template("register.html")
 
-@app.route("/Login" , methods =["GET","POST"])
+@app.route("/Login", methods=["GET", "POST"])
 def login():
-     if Request.access_control_request_method == 'POST':
-        username = Request.form['username']
-        password = Request.form['password']
-        hash_pass = generate_password_hash(password)
-
-        return("login.html")
-     
-
-@app.route("/logout", methods = ["GET","POST"])
-def logout():
-    if Request.access_control_request_method == 'POST':
-        username = Request.form['username']
-        password = Request.form['password']
-        hash_pass = generate_password_hash(password)
-
-        return("logout.html")
-     
-
-@app.route("/book" , methods = ["GET"])
-def book():
-    name = Request.form.get("name")
-    try: 
-        flight_id = int(Request.form.get("flight"_id))
-    except ValueError :
-        return("this is Invalid")
-    
-    flight = flight.query.get(flight_id)
-
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Fe
