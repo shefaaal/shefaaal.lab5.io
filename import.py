@@ -27,4 +27,18 @@ metadata.create_all(engine)
 
 
 # data into sql 
-for index , row in booksdataset.iterro
+for index , row in booksdataset.iterrows():
+    realbooks = db.execute(text("INSERT INTO books (isbn, title, author, year) VALUES (:isbn, :title, :author, :year)"),
+               {"isbn" :row["isbn"],
+                "title" : row["title"],
+                "author": row['author'],
+                "year": row["year"]})
+    if not realbooks :
+        db.execute(text("INSERT INTO books (isbn, title, author, year) VALUES (:isbn, :title, :author, :year)"),
+                   {"isbn": row["isbn"], "title": row["title"], "author": row["author"], "year": row["year"]})
+
+
+db.commit()
+print("done importing")
+    
+    
