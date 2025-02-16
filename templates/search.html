@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Search</title>
+</head>
+<body>
+    <h1>Search for a Book</h1>
+    <form action="/search" method="POST">
+        <input type="text" name="search_term" placeholder="Enter ISBN, Title, or Author" required>
+        <button type="submit">Search</button>
+    </form>
+    {% if books %}
+        <h2>Search Results:</h2>
+        <ul>
+            {% for book in books %}
+                <li>
+                    <a href="/book/{{ book.id }}">
+                        {{ book.title }} by {{ book.author }} ({{ book.year }})
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif search_term %}
+        <p>No results found for "{{ search_term }}"</p>
+    {% endif %}
+</body>
+</html>
