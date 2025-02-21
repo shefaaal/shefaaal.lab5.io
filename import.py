@@ -23,6 +23,15 @@ books = Table('books', metadata,
     Column('author', String, nullable=False),
     Column('year', Integer)
 )
+
+
+reviews = Table ('reviews' , metadata, 
+                 
+            Column('id',Integer,primary_key=True),
+            Column('book_id',Integer,nullable=False),
+            Column('user_id',Integer,nullable=False),
+            Column('review',String,nullable=False)
+              )
 metadata.create_all(engine) 
 
 
