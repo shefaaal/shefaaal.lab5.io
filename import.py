@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine, text, MetaData, Table
+from sqlalchemy import create_engine, text, MetaData, Table,Column,Integer,String,UniqueConstraint
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 # File and database connection setup
@@ -29,7 +29,6 @@ reviews = Table('reviews', metadata,
 
 metadata.create_all(engine)
 
-# Insert books data into the database
 for index, row in booksdataset.iterrows():
     # Prepare the book data
     isbn = row['isbn']
@@ -37,17 +36,16 @@ for index, row in booksdataset.iterrows():
     author = row['author']
     year = row['year']
 
-    # Check if the book already exists based on the ISBN
     existing_book = db.execute(text("SELECT * FROM books WHERE isbn = :isbn"), {"isbn": isbn}).fetchone()
 
     if existing_book:
         print(f"Book with ISBN {isbn} already exists.")
     else:
-        # Insert the new book into the database
+        
         db.execute(text("INSERT INTO books (isbn, title, author, year) VALUES (:isbn, :title, :author, :year)"),
                    {"isbn": isbn, "title": title, "author": author, "year": year})
         print(f"Inserted book: {title} (ISBN: {isbn})")
 
-# Commit the transaction
+
 db.commit()
-print("Done importing")
+print("done importing")
