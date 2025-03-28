@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Geolocation Tracker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+    <h1>MQTT Geolocation Tracker</h1>
+    
+    <label for="mqttHost">MQTT Broker Host:</label>
+    <input type="text" id="mqttHost" placeholder="Broker Host" />
+
+    <label for="mqttPort">MQTT Broker Port:</label>
+    <input type="text" id="mqttPort" placeholder="Broker Port" />
+
+    <button id="startTracking">Start</button>
+    <button id="stopTracking">End</button>
+    <button id="shareStatus">Share My Status</button>
+
+    <!-- Map Container -->
+    <div id="map" style="height: 500px;"></div>
+
+    <div>
+        <h3>Publish Message to Any Topic</h3>
+        <label for="topicInput">Topic:</label>
+        <input type="text" id="topicInput" placeholder="Enter topic name">
+    
+        <label for="messageInput">Message:</label>
+        <textarea id="messageInput" placeholder="Enter message"></textarea>
+    
+        <button id="publishMessage">Publish Message</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
